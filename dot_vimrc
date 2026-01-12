@@ -1,0 +1,14 @@
+set number
+set tabstop=4
+set shiftwidth=4
+set expandtab
+syntax enable
+set mouse=a
+set hlsearch
+set incsearch
+
+python3 from powerline.vim import setup as powerline_setup
+python3 powerline_setup()
+python3 del powerline_setup
+
+set laststatus=2
