@@ -1,0 +1,34 @@
+# ~/.aliases
+
+# Fedora aliases (Workstation/Silverblue/Toolbox).
+alias dnf-hist='dnf history list --reverse'
+alias dnf-info='dnf history info'
+alias dnf-redo='dnf history redo'
+alias dnf-refresh='dnf makecache --refresh'
+alias dnf-undo-last='dnf history undo "$(dnf history list --reverse | tail -n1 | cut -f1 -d\|)"'
+alias dnf-undo='dnf history undo'
+alias fedora='rpm -E %fedora'
+alias rpm-erasekey='sudo rpm -e'
+alias rpm-install-force='sudo rpm -ivh --force'
+alias rpm-keys='rpm -q gpg-pubkey --qf "%{NAME}-%{VERSION}-%{RELEASE}\t%{SUMMARY}\n"'
+alias rpm-list='rpm -qa --last | sort | cut -f1 -d\ '
+alias rpm-log='rpm -qa --last | tac'
+
+if [ -n "$(command -v rpm-ostree)" ]; then
+    # Silverblue-only aliases.
+    t() { [ "$1" = "" ] && toolbox enter || toolbox run "${@}"; }
+    alias dnf='toolbox run sudo dnf'
+    alias kargs='rpm-ostree kargs | tr " " "\n" | sort'
+    alias status='rpm-ostree status'
+    alias status-diff='rpm-ostree db diff $(rpm-ostree status -b | grep BaseCommit | cut -f2 -d\:) $(rpm-ostree status -bv | grep -w Commit | cut -f2 -d\:)'
+    alias status-ostree-diff='ostree diff $(rpm-ostree status -v | grep BaseCommit | head -n1 | cut -f2 -d\:) $(ostree admin status | grep \* | cut -f3 -d\ | cut -f1 -d\.)'
+    alias update='rpm-ostree refresh-md && rpm-ostree upgrade'
+fi
+
+if [ -f /run/.toolboxenv ]; then
+    # Toolbox-only aliases.
+    t() { [ "$1" = "" ] && flatpak-spawn --host "$SHELL" || flatpak-spawn --host "${@}"; }
+    alias dnf='sudo dnf'
+    alias nautilus='flatpak-spawn --host nautilus'
+    alias update='sudo dnf makecache --refresh && sudo dnf update'
+fi
