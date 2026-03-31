@@ -1,5 +1,7 @@
 # ~/.aliases
 
+alias code='flatpak run com.visualstudio.code'
+
 # Fedora aliases (Workstation/Silverblue/Toolbox).
 alias dnf-hist='dnf history list --reverse'
 alias dnf-info='dnf history info'
